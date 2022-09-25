@@ -31,8 +31,8 @@ print("Using:", device.name)
 
 caps = {
     ecodes.EV_MSC : [ecodes.MSC_SCAN],
-    ecodes.EV_KEY : [ecodes.BTN_JOYSTICK, ecodes.BTN_TRIGGER],
-    ecodes.EV_ABS : device.capabilities()[3]
+    ecodes.EV_KEY : device.capabilities()[ecodes.EV_KEY],
+    ecodes.EV_ABS : device.capabilities()[ecodes.EV_ABS],
 }
 
 spoofdevice = evdev.uinput.UInput(events=caps,
