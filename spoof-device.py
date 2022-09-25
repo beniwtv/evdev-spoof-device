@@ -4,24 +4,35 @@ from evdev import ecodes, AbsInfo
 
 devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
 
+if not devices:
+    print('No evdev devices found on your system.',
+          'Check your evdev installation and device permissions.')
+    sys.exit(1)
+
 print("Available devices:")
 for device in devices:
     print(device.path, device.name)
 
 
-if len(sys.argv) == 1: 
+if len(sys.argv) == 1:
     sys.exit(1)
 
-for device in devices:
-    if device.name == sys.argv[1]:
+device = None
+for d in devices:
+    if d.name == sys.argv[1] or d.path == sys.argv[1]:
+        device = d
         break
+
+if not device:
+    print('Device', sys.argv[1], 'not found')
+    sys.exit(1)
 
 print("Using:", device.name)
 
 caps = {
     ecodes.EV_MSC : [ecodes.MSC_SCAN],
-    ecodes.EV_KEY : [ecodes.BTN_JOYSTICK, ecodes.BTN_TRIGGER],
-    ecodes.EV_ABS : device.capabilities()[3]
+    ecodes.EV_KEY : device.capabilities()[ecodes.EV_KEY],
+    ecodes.EV_ABS : device.capabilities()[ecodes.EV_ABS],
 }
 
 spoofdevice = evdev.uinput.UInput(events=caps,
