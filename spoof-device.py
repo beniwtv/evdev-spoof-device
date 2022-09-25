@@ -19,7 +19,7 @@ if len(sys.argv) == 1:
 
 device = None
 for d in devices:
-    if d.name == sys.argv[1]:
+    if d.name == sys.argv[1] or d.path == sys.argv[1]:
         device = d
         break
 
