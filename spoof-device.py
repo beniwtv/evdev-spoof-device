@@ -4,6 +4,11 @@ from evdev import ecodes, AbsInfo
 
 devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
 
+if not devices:
+    print('No evdev devices found on your system.',
+          'Check your evdev installation and device permissions.')
+    sys.exit(1)
+
 print("Available devices:")
 for device in devices:
     print(device.path, device.name)
