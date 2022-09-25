@@ -14,12 +14,18 @@ for device in devices:
     print(device.path, device.name)
 
 
-if len(sys.argv) == 1: 
+if len(sys.argv) == 1:
     sys.exit(1)
 
-for device in devices:
-    if device.name == sys.argv[1]:
+device = None
+for d in devices:
+    if d.name == sys.argv[1]:
+        device = d
         break
+
+if not device:
+    print('Device', sys.argv[1], 'not found')
+    sys.exit(1)
 
 print("Using:", device.name)
 
