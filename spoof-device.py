@@ -31,9 +31,14 @@ print("Using:", device.name)
 
 caps = {
     ecodes.EV_MSC : [ecodes.MSC_SCAN],
-    ecodes.EV_KEY : device.capabilities()[ecodes.EV_KEY],
     ecodes.EV_ABS : device.capabilities()[ecodes.EV_ABS],
 }
+
+if ecodes.EV_KEY in device.capabilities():
+    caps[ecodes.EV_KEY] = device.capabilities()[ecodes.EV_KEY]
+else:
+    # Some devices do not have buttons, so fake at least one button
+    caps[ecodes.EV_KEY] = [ecodes.BTN_JOYSTICK, ecodes.BTN_TRIGGER]
 
 spoofdevice = evdev.uinput.UInput(events=caps,
                                  name=device.name + " PRO",
