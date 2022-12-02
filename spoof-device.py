@@ -31,8 +31,13 @@ print("Using:", device.name)
 
 caps = {
     ecodes.EV_MSC : [ecodes.MSC_SCAN],
-    ecodes.EV_ABS : device.capabilities()[ecodes.EV_ABS],
 }
+
+if ecodes.EV_ABS in device.capabilities():
+    caps[ecodes.EV_ABS] = device.capabilities()[ecodes.EV_ABS]
+else:
+    # Some devices do not have axis, so fake at least two axis
+    caps[ecodes.EV_ABS] = [ecodes.ABS_X, ecodes.ABS_Y]
 
 if ecodes.EV_KEY in device.capabilities():
     caps[ecodes.EV_KEY] = device.capabilities()[ecodes.EV_KEY]
