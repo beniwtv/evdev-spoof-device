@@ -45,6 +45,12 @@ else:
     # Some devices do not have buttons, so fake at least one button
     caps[ecodes.EV_KEY] = [ecodes.BTN_JOYSTICK, ecodes.BTN_TRIGGER]
 
+# Quirk: ATMEL/VIRPIL/191105 VPC Rudder Pedals
+if device.info.vendor == 1003 and device.info.product == 8293:
+    print ("Applying quirk (add X/Y axis) for " + device.name +  "!")
+    caps[ecodes.EV_ABS].append(ecodes.ABS_X)
+    caps[ecodes.EV_ABS].append(ecodes.ABS_Y)
+
 spoofdevice = evdev.uinput.UInput(events=caps,
                                  name=device.name + " PRO",
                                  vendor=device.info.vendor, 
